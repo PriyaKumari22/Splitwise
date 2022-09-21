@@ -1,72 +1,67 @@
-export { BinaryHeap }
+export { BinaryHeap };
 
 class BinaryHeap {
+  constructor() {
+    this.heap = [];
+  }
 
-    constructor() {
-        this.heap = [];
+  insert(value) {
+    console.log(value);
+    this.heap.push(value);
+    this.bubbleUp();
+  }
+
+  size() {
+    return this.heap.length;
+  }
+
+  empty() {
+    return this.size() === 0;
+  }
+
+  bubbleUp() {
+    let idx = this.size() - 1;
+
+    while (idx > 0) {
+      let element = this.heap[idx],
+        parentIndex = Math.floor((idx - 1) / 2),
+        parent = this.heap[parentIndex];
+
+      if (parent[0] >= element[0]) break;
+      this.heap[idx] = parent;
+      this.heap[parentIndex] = element;
+      idx = parentIndex;
+    }
+  }
+
+  extractMax() {
+    const max = this.heap[0];
+    const tmp = this.heap.pop();
+    if (!this.empty()) {
+      this.heap[0] = tmp;
+      this.sinkDown(0);
+    }
+    return max;
+  }
+
+  sinkDown(idx) {
+    let lf = 2 * idx + 1,
+      rt = 2 * idx + 2,
+      lrgst = idx;
+    const length = this.size();
+
+    if (lf < length && this.heap[lf][0] > this.heap[lrgst][0]) {
+      lrgst = lf;
+    }
+    if (rt < length && this.heap[rt][0] > this.heap[lrgst][0]) {
+      lrgst = rt;
     }
 
-    insert(value) {
-        console.log(value);
-        this.heap.push(value);
-        this.bubbleUp();
+    if (lrgst !== idx) {
+      let tmp = this.heap[lrgst];
+      this.heap[lrgst] = this.heap[idx];
+      this.heap[idx] = tmp;
+      this.sinkDown(lrgst);
     }
-
-    size() {
-        return this.heap.length;
-    }
-
-    empty(){
-        return ( this.size()===0 );
-    }
-
-    //using iterative approach
-    bubbleUp() {
-        let index = this.size() - 1;
-
-        while (index > 0) {
-            let element = this.heap[index],
-                parentIndex = Math.floor((index - 1) / 2),
-                parent = this.heap[parentIndex];
-
-            if (parent[0] >= element[0]) break;
-            this.heap[index] = parent;
-            this.heap[parentIndex] = element;
-            index = parentIndex
-        }
-    }
-
-    extractMax() {
-        const max = this.heap[0];
-        const tmp = this.heap.pop();
-        if(!this.empty()) {
-            this.heap[0] = tmp;
-            this.sinkDown(0);
-        }
-        return max;
-    }
-
-    sinkDown(index) {
-
-        let left = 2 * index + 1,
-            right = 2 * index + 2,
-            largest = index;
-        const length = this.size();
-
-        // console.log(this.heap[left], left, length, this.heap[right], right, length, this.heap[largest]);
-
-        if (left < length && this.heap[left][0] > this.heap[largest][0]) {
-            largest = left
-        }
-        if (right < length && this.heap[right][0] > this.heap[largest][0]) {
-            largest = right
-        }
-        // swap
-        if (largest !== index) {
-            let tmp = this.heap[largest];
-            this.heap[largest] = this.heap[index];
-            this.heap[index] = tmp;
-            this.sinkDown(largest)
-        }
-    }
+  }
 }
